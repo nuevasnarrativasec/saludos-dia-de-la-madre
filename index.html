@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saludos por el Día de la Madre</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff9f5;
+      color: #4a2c2a;
+      padding: 20px;
+    }
+    .marquee-container {
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 3px solid #f8c7cc;
+      border-bottom: 3px solid #f8c7cc;
+      background: #ffeef2;
+      padding: 20px 0;
+      position: relative;
+    }
+    .marquee-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 1100s linear infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .saludo {
+      display: inline-block;
+      margin: 0 30px;
+    }
+    .nombre {
+      font-weight: bold;
+      color: #e00050;
+    }
+    .mensaje {
+      margin-left: 10px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h2>🌸 Saludos por el Día de la Madre 🌸</h2>
+  <div class="marquee-container">
+    <div class="marquee-content" id="saludos">
+      <!-- Aquí se insertarán los saludos -->
+    </div>
+  </div>
+
+  <script>
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSLPnwcrZALWTxbp4kXu8RGE0bXJj-x-6xf7axUfWeHS9lzVWWjOTf8Q7WMus0M8Q/pub?output=csv'; 
+
+    fetch(csvUrl)
+      .then(response => response.text())
+      .then(csv => {
+        const lines = csv.split('\n').slice(1); // Salta encabezado
+        let html = '';
+
+        lines.forEach(line => {
+          const [nombre, mensaje] = line.split(',');
+          if (nombre && mensaje) {
+            html += `
+              <div class="saludo">
+                <span class="nombre">${nombre.trim()}:</span>
+                <span class="mensaje">${mensaje.trim()}</span>
+              </div>
+            `;
+          }
+        });
+
+        document.getElementById('saludos').innerHTML = html;
+      })
+      .catch(error => {
+        console.error('Error al cargar CSV:', error);
+      });
+  </script>
+</body>
+</html>
